@@ -1,0 +1,149 @@
+{
+  "City": {
+    "Bangalore": 0,
+    "Delhi": 1,
+    "Hyderabad": 2,
+    "Jaipur": 3,
+    "Mumbai": 4,
+    "Pune": 5
+  },
+  "Persona": {
+    "Dormant": 0,
+    "Frequent Canceller": 1,
+    "Loyal": 2,
+    "Premium": 3,
+    "Promotion Sensitive": 4,
+    "Seasonal": 5
+  },
+  "Membership": {
+    "Gold": 0,
+    "None": 1,
+    "Platinum": 2,
+    "Silver": 3
+  },
+  "Day_Of_Week": {
+    "Friday": 0,
+    "Monday": 1,
+    "Saturday": 2,
+    "Sunday": 3,
+    "Thursday": 4,
+    "Tuesday": 5,
+    "Wednesday": 6
+  },
+  "Activity_Source": {
+    "Direct": 0,
+    "Notification": 1,
+    "Promotion": 2,
+    "Referral": 3,
+    "Search": 4
+  },
+  "Device_Type": {
+    "Android": 0,
+    "iPhone": 1
+  },
+  "Booking_Window": {
+    "Afternoon": 0,
+    "Evening": 1,
+    "Morning": 2
+  },
+  "Season": {
+    "Festival": 0,
+    "Monsoon": 1,
+    "Summer": 2,
+    "Winter": 3
+  },
+  "Weather_Condition": {
+    "Clear": 0,
+    "Cloudy": 1,
+    "Hot": 2,
+    "Humid": 3,
+    "Rainy": 4
+  },
+  "Holiday_Name": {
+    "Christmas": 0,
+    "Diwali": 1,
+    "Gandhi Jayanti": 2,
+    "Holi": 3,
+    "Independence Day": 4,
+    "Makar Sankranti": 5,
+    "New Year": 6,
+    "None": 7
+  },
+  "Holiday_Type": {
+    "Festival": 0,
+    "National": 1,
+    "None": 2
+  },
+  "Service_ID": {
+    "S001": 0,
+    "S002": 1,
+    "S003": 2,
+    "S004": 3,
+    "S005": 4,
+    "S006": 5,
+    "S007": 6,
+    "S008": 7,
+    "S009": 8,
+    "S010": 9
+  },
+  "Preferred_Category": {
+    "Appliance": 0,
+    "Beauty": 1,
+    "Cleaning": 2,
+    "Home Care": 3,
+    "Home Repair": 4,
+    "None": 5
+  },
+  "Customer_Segment": {
+    "Active": 0,
+    "Dormant": 1,
+    "Loyal": 2,
+    "New": 3,
+    "VIP": 4
+  },
+  "Promotion_Type": {
+    "Cashback": 0,
+    "Coupon": 1,
+    "Direct Discount": 2,
+    "Free Add-on": 3,
+    "None": 4
+  },
+  "Promotion_Intensity": {
+    "Low": 0,
+    "Medium": 1,
+    "None": 2
+  },
+  "Service_Name": {
+    "AC Repair": 0,
+    "AC Service": 1,
+    "Bathroom Cleaning": 2,
+    "Deep Home Cleaning": 3,
+    "Electrician": 4,
+    "Pest Control": 5,
+    "Plumbing": 6,
+    "RO Water Purifier Service": 7,
+    "Salon at Home": 8,
+    "Sofa Cleaning": 9
+  },
+  "Category": {
+    "Appliance": 0,
+    "Beauty": 1,
+    "Cleaning": 2,
+    "Home Care": 3,
+    "Home Repair": 4
+  },
+  "Promotion_Effectiveness": {
+    "High": 0,
+    "Low": 1,
+    "Medium": 2
+  },
+  "Demand_Level": {
+    "High": 0,
+    "Medium": 1
+  },
+  "Skill_Level": {
+    "Basic": 0,
+    "Expert": 1,
+    "Intermediate": 2
+  }
+}

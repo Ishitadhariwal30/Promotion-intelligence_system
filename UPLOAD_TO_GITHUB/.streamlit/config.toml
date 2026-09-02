@@ -1,0 +1,27 @@
+# Streamlit native theme.
+#
+# Set here rather than in CSS wherever possible, because Streamlit's own
+# widgets read these values. Styling widgets through CSS alone leaves
+# selectboxes and sliders looking like a different product from the rest
+# of the page.
+
+[theme]
+base = "light"
+
+primaryColor = "#1B4965"
+backgroundColor = "#FFFFFF"
+secondaryBackgroundColor = "#F8FAFC"
+textColor = "#0F172A"
+
+font = "sans serif"
+
+[server]
+maxUploadSize = 50
+enableStaticServing = true
+
+[browser]
+gatherUsageStats = false
+
+[client]
+showErrorDetails = true
+toolbarMode = "minimal"

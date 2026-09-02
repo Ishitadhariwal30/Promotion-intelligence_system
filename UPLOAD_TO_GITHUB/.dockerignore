@@ -1,0 +1,54 @@
+# ============================================================
+# What must stay OUT of the build context
+# ============================================================
+#
+# Before Docker runs a single instruction it copies this whole folder
+# to the daemon - the "build context". Without this file that copy is
+# 484 MB, of which 473 MB is .venv, and you wait for it on EVERY build.
+#
+# .venv is also actively harmful, not just slow: it holds Windows
+# binaries that are useless inside a Linux container, and if it were
+# copied over /app it would shadow the packages pip just installed.
+.venv/
+venv/
+env/
+
+__pycache__/
+*.py[cod]
+*.pyc
+
+# Created by a shell redirect accident.
+$null
+
+# Secrets never belong in an image. Anyone who can pull the image can
+# read every layer, including files you deleted in a later layer.
+.streamlit/secrets.toml
+*.env
+
+.git/
+.github/
+.pytest_cache/
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Docs do not affect how the app runs.
+README.md
+*.md
+
+# ============================================================
+# What IS copied, deliberately
+# ============================================================
+#
+# sample_data/ stays in - all 10.2 MB. It is the app's data source,
+# not a cache. An image without it starts cleanly and fails on the
+# first page that reads a table.
+#
+# tests/ stays in too, so you can run the smoke test INSIDE the
+# container:
+#
+#   docker run --rm urban-company-app python tests/smoke_test.py
+#
+# That is a stronger check than running it on your laptop - it tests
+# the environment that actually ships.

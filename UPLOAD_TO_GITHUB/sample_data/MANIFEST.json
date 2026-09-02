@@ -1,0 +1,71 @@
+{
+  "exported_at": "2026-08-31T17:07:18.093433",
+  "model_source": "workspace.default.promotion_booking_model@champion",
+  "feature_count": 64,
+  "encoding_verified_deviation": 0.0,
+  "simulation_start": "2025-01-01",
+  "simulation_end": "2025-12-31",
+  "gross_margin": 0.35,
+  "tables": {
+    "customers": {
+      "rows": 1000,
+      "columns": 13,
+      "size_mb": 0.03
+    },
+    "services": {
+      "rows": 10,
+      "columns": 11,
+      "size_mb": 0.01
+    },
+    "providers": {
+      "rows": 250,
+      "columns": 13,
+      "size_mb": 0.01
+    },
+    "bookings": {
+      "rows": 19621,
+      "columns": 39,
+      "size_mb": 0.61
+    },
+    "promotions": {
+      "rows": 20055,
+      "columns": 21,
+      "size_mb": 0.33
+    },
+    "recommendations": {
+      "rows": 17141,
+      "columns": 34,
+      "size_mb": 1.21
+    },
+    "activity_daily": {
+      "rows": 40150,
+      "columns": 11,
+      "size_mb": 0.17
+    },
+    "customer_state_monthly": {
+      "rows": 12000,
+      "columns": 24,
+      "size_mb": 0.29
+    },
+    "customer_state_year_end": {
+      "rows": 1000,
+      "columns": 24,
+      "size_mb": 0.05
+    },
+    "customer_state_daily": {
+      "rows": 365000,
+      "columns": 24,
+      "size_mb": 3.81
+    },
+    "training_features": {
+      "rows": 67082,
+      "columns": 74,
+      "size_mb": 3.09
+    },
+    "capacity": {
+      "rows": 5428,
+      "columns": 10,
+      "size_mb": 0.08
+    }
+  }
+}

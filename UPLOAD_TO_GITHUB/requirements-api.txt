@@ -1,0 +1,34 @@
+# Extra packages for the REST API (api.py) only.
+#
+#   uv pip install -r requirements.txt -r requirements-api.txt
+#   uvicorn api:app --reload --port 8000
+#   open http://localhost:8000/docs
+#
+# ============================================================
+# WHY THIS IS A SEPARATE FILE
+# ============================================================
+#
+# Streamlit Community Cloud installs requirements.txt on every build.
+# Putting fastapi in there would add packages to the Streamlit deploy
+# that app.py never imports - a slower build, a larger image, and more
+# things that can break a deployment that does not need them.
+#
+# Keeping API-only dependencies here means the Streamlit deploy stays
+# exactly as it is today, and anyone deploying the API installs both.
+#
+# api.py also imports streamlit indirectly, via services/ - the caching
+# decorators live there. So the API needs BOTH files, not just this one.
+# ============================================================
+
+# Verified working: all four endpoints return correctly against the
+# real model. See the versions below.
+fastapi==0.141.1
+pydantic==2.13.5
+
+# ASGI server that actually runs the app. Already present as a Streamlit
+# dependency, pinned here so the API does not silently rely on that.
+uvicorn==0.52.2
+
+# Only needed to run fastapi.testclient in tests, not to serve.
+# Uncomment if you add API tests.
+# httpx2==2.12.0

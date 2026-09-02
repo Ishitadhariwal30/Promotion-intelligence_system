@@ -1,0 +1,114 @@
+# ============================================================
+# CI - Urban Company Promotion Intelligence Platform
+# ============================================================
+#
+# PURPOSE
+#   Run the smoke test on every push, so a broken commit fails here
+#   rather than on the live URL someone else is looking at.
+#
+# WHAT IT CHECKS
+#   1. requirements.txt actually installs on a clean Linux machine
+#   2. Every parquet file config.py declares is really committed
+#   3. The model loads, and scores one customer end to end
+#
+# WHY EACH ONE EARNS ITS PLACE
+#   1  Your laptop has packages installed that requirements.txt never
+#      mentions. Streamlit Cloud starts empty. This is the difference.
+#   2  A data file left out of the commit deploys perfectly and then
+#      throws FileNotFoundError on whichever page needs it.
+#   3  The model wants 64 encoded integers in a fixed order. If an
+#      export ever disagrees with the model, only scoring catches it.
+#
+# WHAT THIS DOES NOT DO
+#   It does not deploy. Streamlit Community Cloud watches the branch
+#   and redeploys on its own. This is the check that runs alongside.
+# ============================================================
+
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  # Lets you trigger a run by hand from the Actions tab.
+  workflow_dispatch:
+
+jobs:
+  smoke-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v4
+
+      # 3.12 matches the local environment the app was verified on.
+      # Keep this in step with Streamlit Cloud's Python version - a
+      # mismatch here means CI passes and the deploy still breaks.
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      # If this step fails, requirements.txt is wrong - and it would
+      # have failed identically on Streamlit Cloud.
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      # Guards against the classic mistake: .gitignore excluding a
+      # data file, so the repo builds fine and the app has no data.
+      - name: Confirm the model artifacts were committed
+        run: |
+          test -f sample_data/model/model.joblib
+          test -f sample_data/model/encoders.json
+          test -f sample_data/model/feature_order.json
+          echo "model artifacts present"
+
+      - name: Run smoke test
+        run: python tests/smoke_test.py
+
+      # Catches syntax errors on pages nobody opened before pushing.
+      # Streamlit imports pages lazily, so a broken page stays hidden
+      # until a visitor clicks that exact tab.
+      - name: Byte-compile every page
+        run: python -m compileall -q app.py config.py pages services components
+
+  # ============================================================
+  # Build the container - MANUAL ONLY
+  # ============================================================
+  #
+  # Streamlit Community Cloud does not use the Dockerfile. It reads
+  # requirements.txt and builds its own environment, so nothing about
+  # the Streamlit deploy depends on this job passing.
+  #
+  # It therefore does NOT run on push. A red cross here would say
+  # nothing about whether the app deployed, and a CI signal that can
+  # fail without meaning anything is worse than no signal - you learn
+  # to ignore it, and then you ignore the one that mattered.
+  #
+  # Run it deliberately, from the Actions tab -> CI -> Run workflow,
+  # when you are about to deploy the container somewhere that DOES
+  # use it: Render, Hugging Face Spaces, Azure Container Apps.
+  #
+  # It builds the image and runs the smoke test inside it, which also
+  # proves libgomp1 is present and LightGBM can load - the one thing
+  # in the Dockerfile that was never verified locally.
+  docker-build:
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v4
+
+      - name: Build the image
+        run: docker build -t urban-company-app .
+
+      # Proves libgomp1 is present and LightGBM can actually load.
+      # Without that apt-get line the build succeeds and this step is
+      # what fails, with the real reason.
+      - name: Run the smoke test inside the image
+        run: docker run --rm urban-company-app python tests/smoke_test.py

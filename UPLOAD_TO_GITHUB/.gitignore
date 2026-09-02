@@ -1,0 +1,48 @@
+# ============================================================
+# What must NEVER be committed
+# ============================================================
+#
+# The virtual environment is 473 MB - roughly 45x the size of
+# the actual app. It is also machine-specific: it contains
+# Windows binaries that would be useless on the Linux container
+# Streamlit Cloud runs. requirements.txt is what rebuilds it,
+# and that is 20 lines.
+.venv/
+venv/
+env/
+
+# Python bytecode - regenerated on every run, never useful to share.
+__pycache__/
+*.py[cod]
+*.pyc
+
+# Accidental file created by a shell redirect. Safe to delete.
+$null
+
+# Local Streamlit secrets. If you ever add API keys or connection
+# strings they go here, and this line is what keeps them off GitHub.
+.streamlit/secrets.toml
+
+# OS and editor noise
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# ============================================================
+# What IS committed, deliberately
+# ============================================================
+#
+# sample_data/ stays IN the repo - all 10.2 MB of it. It is not
+# a cache, it is the app's data source. Notebook 17 exported it
+# so the app can run with no Databricks connection at all.
+# Without it the deployed app has nothing to show.
+#
+#   sample_data/*.parquet          the tables
+#   sample_data/model/model.joblib the trained model, 1.3 MB
+#   sample_data/model/encoders.json      Persona="Loyal" -> 3
+#   sample_data/model/feature_order.json the 61 columns, in order
+#   sample_data/MANIFEST.json      what was exported, and when
+#
+# If you ever re-export from notebook 17, re-commit these files
+# or the deployed app keeps serving the old model.

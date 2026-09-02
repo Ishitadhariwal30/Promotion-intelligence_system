@@ -1,0 +1,56 @@
+# Urban Company Promotion Intelligence Platform
+#
+#   pip install -r requirements.txt
+#   streamlit run app.py
+#
+# ============================================================
+# WHY THESE ARE PINNED WITH == AND NOT >=
+# ============================================================
+#
+# `>=` means "this version or anything newer". On your laptop that is
+# harmless, because the packages were installed months ago and stay put.
+# On Streamlit Cloud the container is built fresh, so `>=` resolves to
+# whatever is newest that morning - which is not what anything was
+# tested against.
+#
+# That is not hypothetical here. `pandas>=2.0.0` resolved to pandas 3,
+# where text columns have dtype `str` instead of `object`. Any code
+# checking `dtype == object` silently stops matching, encoding is
+# skipped, and LightGBM fails much later with an error that points
+# nowhere near the cause.
+#
+# Pinning means the app that gets deployed is the app that was tested.
+#
+# These exact versions were verified end to end by tests/smoke_test.py -
+# data loads, model loads, one customer scores.
+#
+# To upgrade: change one pin, run tests/smoke_test.py, commit only if
+# it passes. Never bump them all at once - if something breaks you will
+# not know which one did it.
+# ============================================================
+
+streamlit==1.61.1
+pandas==3.0.5
+numpy==2.5.2
+plotly==6.9.0
+
+# Parquet reading. The export from notebook 17 is snappy-compressed.
+pyarrow==24.0.0
+
+# Required to unpickle the model. joblib.load() reconstructs an
+# LGBMClassifier, so lightgbm and scikit-learn must both be present
+# even though the app never trains anything.
+lightgbm==4.7.0
+joblib==1.5.3
+
+# NOTE - version drift worth resolving.
+#
+# The model in sample_data/model/ was pickled under scikit-learn 1.6.1.
+# Loading it under 1.9.0 works, but emits InconsistentVersionWarning:
+# the pickle format is being read by a version that did not write it.
+#
+# It scores correctly today. The clean fix is to re-export from
+# notebook 17 on a cluster running 1.9.0, or pin this to 1.6.1 and
+# re-verify. Left as-is deliberately, because 1.9.0 is the version the
+# smoke test actually passed under.
+scikit-learn==1.9.0
